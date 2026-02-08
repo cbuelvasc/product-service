@@ -1,0 +1,123 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: product-service-config
+  labels:
+    app: product-service
+    managed-by: kubernetes
+data:
+  application.yaml: |
+    server:
+      port: 8080
+      shutdown: graceful
+      servlet:
+        context-path: /api/product-service
+      tomcat:
+        connection-timeout: 1s
+        keep-alive-timeout: 15s
+        threads:
+          max: 100
+          min-spare: 20
+        max-connections: 10000
+        accept-count: 100
+        max-swallow-size: 2MB
+        max-http-form-post-size: 2MB
+
+    spring:
+      application:
+        name: product-service
+      output:
+        ansi:
+          enabled: always
+      datasource:
+        url: jdbc:h2:mem:productdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        driver-class-name: org.h2.Driver
+        username: sa
+        password:
+      h2:
+        console:
+          enabled: true
+      jpa:
+        hibernate:
+          ddl-auto: validate
+        show-sql: false
+        properties:
+          hibernate:
+            format_sql: true
+        open-in-view: false
+      flyway:
+        enabled: true
+        locations: classpath:db/migration
+        clean-disabled: true
+        out-of-order: true
+        ignore-migration-patterns: '*:ignored'
+      data:
+        redis:
+          host: ${REDIS_HOST:localhost}
+          port: ${REDIS_PORT:6379}
+          password: ${REDIS_PASSWORD:}
+          timeout: 2000ms
+          connect-timeout: 2000ms
+          client-type: lettuce
+      cache:
+        type: redis
+        redis:
+          time-to-live: 3600s
+          cache-null-values: false
+          use-key-prefix: true
+          key-prefix: product_
+
+    management:
+      endpoints:
+        web:
+          base-path: /admin
+          exposure:
+            include: refresh, configprops, env, flyway, health, metrics, heapdump, info, loggers, mappings, prometheus
+      health:
+        readiness-state:
+          enabled: true
+        liveness-state:
+          enabled: true
+        redis:
+          enabled: true
+        db:
+          enabled: true
+      endpoint:
+        shutdown:
+          access: unrestricted
+        health:
+          show-details: always
+          show-components: always
+          probes:
+            enabled: true
+          group:
+            readiness:
+              include: db, redis, diskSpace
+      info:
+        env:
+          enabled: true
+        java:
+          enabled: true
+        os:
+          enabled: true
+      metrics:
+        tags:
+          application: ${spring.application.name}
+
+    logging:
+      level:
+        root: INFO
+        org.springframework: INFO
+        org.hibernate: INFO
+      pattern:
+        level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+
+    springdoc:
+      api-docs:
+        enabled: true
+        path: /v3/api-docs
+      swagger-ui:
+        enabled: true
+        path: /swagger-ui.html
+        operationsSorter: method
+        tagsSorter: alpha
