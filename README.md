@@ -109,6 +109,7 @@ Additional project documentation in the [`wiki/`](wiki/) folder:
 | Document | Description |
 |----------|-------------|
 | [Architecture](wiki/Architecture.md) | Hexagonal layers, component diagram, **sequence diagram** for the product comparison flow, design decisions, and package structure. |
+| [CI Workflow](wiki/CI-Workflow.md) | GitHub Actions CI pipeline: triggers, **Mermaid diagrams** of the pipeline and steps, job descriptions (build/test/JaCoCo, Docker build and push). |
 
 ---
 
