@@ -1,14 +1,14 @@
 # Product Service – Kubernetes deployment
 
-This directory contains the Kubernetes manifests to deploy **product-service** (and assumes Redis is deployed, e.g. from `../redis/`).
+This directory contains the Kubernetes manifests to deploy **product-service**. Redis must be deployed first (see [../redis/README.md](../redis/README.md)); product-service connects to the Service `redis` on port 6379.
 
 ## Files
 
 | File | Description |
 |------|-------------|
-| **configmap.yaml** | Application configuration (full `application.yaml` mounted in the pod) |
-| **deployment.yaml** | Deployment with ConfigMap mount, health checks (startup/liveness/readiness) |
-| **service.yaml** | NodePort Service for external access |
+| **configmap.yaml** | ConfigMap `product-service-config`: full `application.yaml` mounted at `/config` in the pod |
+| **deployment.yaml** | Deployment `product-service-deployment`: ConfigMap volume, env `SPRING_CONFIG_ADDITIONAL_LOCATION=file:/config/`, startup/liveness/readiness probes, `imagePullPolicy: Never` for Minikube |
+| **service.yaml** | Service `product-service`: NodePort 30080, port 80 → targetPort 8080 (use `kubectl port-forward svc/product-service 8080:80` for local access) |
 
 ## Prerequisite: Docker image
 
@@ -25,7 +25,7 @@ docker build -t product-service:1.0.0 .
 
 ```bash
 docker build -t product-service:1.0.0 .
-# push to your registry, then set imagePullPolicy: IfNotPresent or Always in deployment.yaml
+# Push to your registry, then in deployment.yaml set imagePullPolicy: IfNotPresent or Always and use the full image URL
 ```
 
 ## Deploy
@@ -61,7 +61,7 @@ kubectl apply -f k8s/product-service/service.yaml
 | NodePort | 30080 |
 | Context path | /api/product-service |
 
-Config is loaded from the ConfigMap at `/config/application.yaml`; Redis is configured via env vars `REDIS_HOST` and `REDIS_PORT` (default: `redis:6379`).
+Config is loaded from the ConfigMap at `/config/application.yaml` (see `configmap.yaml`). Redis is configured via env vars `REDIS_HOST` and `REDIS_PORT` in the Deployment (default: `redis`, `6379`). All resources use the label `managed-by: kubernetes`.
 
 ## Access
 
@@ -146,6 +146,10 @@ Ensure Redis is running and product-service can resolve `redis` (same namespace 
 
 ## Delete
 
+From repo root:
+
 ```bash
 kubectl delete -f k8s/product-service/
 ```
+
+This removes the Deployment, Service, and ConfigMap. Redis is unchanged; remove it with `kubectl delete -f k8s/redis/` if needed.

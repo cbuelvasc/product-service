@@ -1,6 +1,16 @@
 # Kubernetes deployment (Minikube)
 
-Manifests to deploy **product-service** and **Redis** on a local Minikube cluster.
+Manifests to deploy **product-service** and **Redis** on a local Minikube cluster. All resources use the label `managed-by: kubernetes`.
+
+**Quick start (from repo root):**
+
+```bash
+minikube start && eval $(minikube docker-env)
+docker build -t product-service:1.0.0 .
+kubectl apply -f k8s/redis/ -f k8s/product-service/
+kubectl port-forward svc/product-service 8080:80
+# API at http://localhost:8080/api/product-service
+```
 
 ## Requirements
 
@@ -58,9 +68,10 @@ kubectl apply -f k8s/redis/ -f k8s/product-service/
 ```bash
 kubectl get pods
 kubectl get svc
+kubectl get configmap product-service-config
 ```
 
-When the pods are `Running` and `Ready`, the application is available.
+When the pods are `Running` and `Ready`, the application is available. See [redis/README.md](redis/README.md) and [product-service/README.md](product-service/README.md) for more verify/logs commands.
 
 ## 5. Access the application
 
@@ -109,6 +120,8 @@ kubectl describe pod -l app=product-service
 
 ## 7. Remove the deployment
 
+From repo root (delete in reverse order of deploy: app first, then Redis):
+
 ```bash
 kubectl delete -f k8s/product-service/ -f k8s/redis/
 ```
@@ -118,7 +131,6 @@ kubectl delete -f k8s/product-service/ -f k8s/redis/
 ```
 k8s/
 ├── README.md              # This file
-├── microservices/         # Reference example (ticket-service)
 ├── redis/
 │   ├── deployment.yaml
 │   ├── service.yaml
