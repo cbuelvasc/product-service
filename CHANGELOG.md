@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **Kubernetes (Minikube)**: `k8s/` manifests to deploy product-service and Redis locally.
+  - **Redis**: Deployment (`redis-deployment`), ClusterIP Service (`redis`), liveness/readiness probes with `failureThreshold`; `k8s/redis/README.md` with deploy, verify, logs.
+  - **product-service**: ConfigMap (`product-service-config`) mounting `application.yaml` at `/config`, Deployment with `SPRING_CONFIG_ADDITIONAL_LOCATION`, startup/liveness/readiness probes, NodePort Service (30080); `k8s/product-service/README.md` with deploy, access (port-forward, NodePort), logs, troubleshooting.
+  - Root `k8s/README.md` (English): Minikube setup, image build, apply order, access options, structure. Main README section "Kubernetes (Minikube)" linking to `k8s/`.
 - CI job to build and push Docker image to GitHub Container Registry (GHCR) on push to `develop`.
 - Explicit JaCoCo coverage validation step in CI; build fails if line or branch coverage is below 80%.
 - Wiki folder with `Architecture.md`: hexagonal architecture, request flow, product comparison sequence diagram, design decisions, and project structure.

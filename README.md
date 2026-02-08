@@ -159,6 +159,10 @@ Services:
 
 Environment variables for the service (in `docker-compose`): `REDIS_HOST`, `REDIS_PORT`. API health check: `GET /api/product-service/admin/health/liveness`.
 
+### Kubernetes (Minikube)
+
+Manifests to deploy the application and Redis on Minikube are in [`k8s/`](k8s/). They include Deployment and Service for Redis and for product-service (NodePort 30080). See [k8s/README.md](k8s/README.md) for requirements, image build, and deployment steps.
+
 ### Interactive documentation (Swagger UI)
 
 - **Swagger UI:** http://localhost:8080/api/product-service/swagger-ui.html  
