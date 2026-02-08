@@ -204,7 +204,15 @@ The API is available at `http://localhost:8080`. Base path: `/api/product-servic
 
 ### Docker
 
-**Build image:**
+**Download image from GitHub Container Registry (built by CI on `develop`):**
+
+```bash
+docker pull ghcr.io/<OWNER>/<REPO>/product-service:latest
+```
+
+Replace `<OWNER>` and `<REPO>` with your GitHub organization and repository name (e.g. `mercadolibre/product-service` → `ghcr.io/mercadolibre/product-service/product-service:latest`).
+
+**Build local:**
 
 ```bash
 docker build -t product-service:latest .
