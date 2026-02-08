@@ -1,0 +1,6 @@
+# Test profile: base path defined once; context-path uses it so response path is /api/product-service/products/compare
+api:
+  base-path: /api/product-service
+server:
+  servlet:
+    context-path: ${api.base-path}

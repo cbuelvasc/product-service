@@ -1,0 +1,50 @@
+{
+	"info": {
+		"_postman_id": "04ab1b0f-9e20-4565-b89a-935d7dfeb09a",
+		"name": "Mercado Libre",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1913699"
+	},
+	"item": [
+		{
+			"name": "Compare Products",
+			"item": [
+				{
+					"name": "Compare Products",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/product-service/products/compare?ids=1,2&fields=id,name,price,rating,specifications",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"product-service",
+								"products",
+								"compare"
+							],
+							"query": [
+								{
+									"key": "ids",
+									"value": "1,2"
+								},
+								{
+									"key": "fields",
+									"value": "id,name,price,rating,specifications"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
