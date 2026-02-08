@@ -2,9 +2,9 @@ name: CI - Build, Test & JaCoCo
 
 on:
   push:
-    branches: [main, master, develop]
+    branches: [master, develop]
   pull_request:
-    branches: [main, master, develop]
+    branches: [master, develop]
 
 jobs:
   build-and-validate:
