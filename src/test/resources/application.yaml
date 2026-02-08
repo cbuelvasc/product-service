@@ -4,3 +4,15 @@ api:
 server:
   servlet:
     context-path: ${api.base-path}
+
+# Evitar Redis en tests: usar caché en memoria para que los tests no dependan de Redis
+spring:
+  cache:
+    type: simple
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+  # Evitar resolución de red en entornos restringidos (CI/sandbox)
+  cloud:
+    inetutils:
+      preferred-networks: 127.0.0.1
