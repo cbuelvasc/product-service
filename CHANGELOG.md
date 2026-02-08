@@ -17,11 +17,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - CI job to build and push Docker image to GitHub Container Registry (GHCR) on push to `develop`.
 - Explicit JaCoCo coverage validation step in CI; build fails if line or branch coverage is below 80%.
+- Wiki folder with `Architecture.md`: hexagonal architecture, request flow, product comparison sequence diagram, design decisions, and project structure.
 
 ### Changed
 
 - CI workflow title updated to "CI - Build, Test, JaCoCo & Docker".
 - README Docker section: instructions to download image from GHCR and consistent English wording.
+- README: removed detailed layers and responsibilities section; added link to Architecture wiki and Wiki section referencing `wiki/Architecture.md`.
 
 ---
 
